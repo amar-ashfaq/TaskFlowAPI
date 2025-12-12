@@ -1,4 +1,5 @@
-﻿using TaskFlowAPI.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using TaskFlowAPI.Data;
 using TaskFlowAPI.Entities;
 
 namespace TaskFlowAPI.Repositories
@@ -32,7 +33,7 @@ namespace TaskFlowAPI.Repositories
 
         public TaskFlow CreateTaskFlow(TaskFlow flow)
         {
-            _context.Add(flow);
+            _context.TaskFlows.Add(flow);
             _context.SaveChanges();
 
             return flow;

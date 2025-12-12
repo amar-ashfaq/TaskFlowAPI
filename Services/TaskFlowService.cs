@@ -55,9 +55,11 @@ namespace TaskFlowAPI.Services
 
             var taskFlow = new TaskFlow
             {
+                UserId = flowDto.UserId,
                 Name = flowDto.Name,
                 Description = flowDto.Description,
-                Status = flowDto.Status
+                Status = flowDto.Status,
+                CreatedAt = flowDto.CreatedAt
             };
 
             _taskFlowRepository.CreateTaskFlow(taskFlow);
@@ -83,6 +85,7 @@ namespace TaskFlowAPI.Services
             taskFlow.Name = flowDto.Name;
             taskFlow.Description = flowDto.Description;
             taskFlow.Status = flowDto.Status;
+            taskFlow.UpdatedAt = flowDto.UpdatedAt;
 
             _taskFlowRepository.UpdateTaskFlow();
 
