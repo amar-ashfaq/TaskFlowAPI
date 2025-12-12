@@ -32,26 +32,15 @@ namespace TaskFlowAPI.Repositories
 
         public TaskFlow CreateTaskFlow(TaskFlow flow)
         {
-            ArgumentNullException.ThrowIfNull(flow);
-
             _context.Add(flow);
             _context.SaveChanges();
 
             return flow;
         }
 
-        public TaskFlow UpdateTaskFlow(int id, TaskFlow flow)
+        public void UpdateTaskFlow()
         {
-            var task = GetTaskFlow(id);
-
-            flow.Name = task.Name;
-            flow.Description = task.Description;
-            flow.Status = task.Status;
-            flow.UpdatedAt = DateTime.Now;
-
             _context.SaveChanges();
-
-            return flow;
         }
 
         public void DeleteTaskFlow(int id)

@@ -10,7 +10,7 @@ namespace TaskFlowAPI.Repositories
 
         TaskFlow CreateTaskFlow(TaskFlow flow);
 
-        TaskFlow UpdateTaskFlow(int id, TaskFlow flow);
+        void UpdateTaskFlow();
 
         void DeleteTaskFlow(int id);
     }
