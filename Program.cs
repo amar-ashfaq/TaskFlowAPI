@@ -18,6 +18,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Register Dependancy Injection
 builder.Services.AddScoped<ITaskFlowRepository, TaskFlowRepository>();
 builder.Services.AddScoped<ITaskFlowService, TaskFlowService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
