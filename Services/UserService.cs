@@ -7,9 +7,11 @@ namespace TaskFlowAPI.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        public UserService(IUserRepository userRepository)
+        private readonly IPasswordService _passwordService;
+        public UserService(IUserRepository userRepository, IPasswordService passwordService)
         {
             _userRepository = userRepository;
+            _passwordService = passwordService;
         }
 
         public List<UserReadDto> GetUsers()
@@ -63,8 +65,8 @@ namespace TaskFlowAPI.Services
             {
                 Name = userDto.Name,
                 Username = userDto.Username,
-                HashedPassword = userDto.HashedPassword,
-                PasswordSalt = ""
+                HashedPassword = _passwordService.HashPassword(userDto.Password, out var salt),
+                PasswordSalt = Convert.ToHexString(salt)
             };
 
             _userRepository.CreateUser(user);
@@ -87,7 +89,8 @@ namespace TaskFlowAPI.Services
 
             user.Name = userDto.Name;
             user.Username = userDto.Username;
-            user.HashedPassword = userDto.HashedPassword;
+            user.HashedPassword = _passwordService.HashPassword(userDto.Password, out var salt);
+            user.PasswordSalt = Convert.ToHexString(salt);
 
             _userRepository.UpdateUser();
         }

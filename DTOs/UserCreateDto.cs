@@ -8,6 +8,6 @@ namespace TaskFlowAPI.DTOs
         [Required]
         public string Username { get; set; }
         [Required]
-        public string HashedPassword { get; set; }
+        public string Password { get; set; }
     }
 }

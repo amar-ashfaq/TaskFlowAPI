@@ -48,6 +48,8 @@ builder.Services.AddScoped<ITaskFlowRepository, TaskFlowRepository>();
 builder.Services.AddScoped<ITaskFlowService, TaskFlowService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IPasswordService, PasswordService>();
 
 var app = builder.Build();
 
