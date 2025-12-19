@@ -61,6 +61,8 @@ namespace TaskFlowAPI.Services
         {
             ArgumentNullException.ThrowIfNull(userDto);
 
+            CheckIfExistingUsername(userDto);
+
             var user = new User
             {
                 Name = userDto.Name,
@@ -75,10 +77,18 @@ namespace TaskFlowAPI.Services
             {
                 Id = user.Id,
                 Name = user.Name,
-                Username = user.Username,
-                HashedPassword = user.HashedPassword,
-                PasswordSalt = user.PasswordSalt
+                Username = user.Username
             };
+        }
+
+        private void CheckIfExistingUsername(UserCreateDto userDto)
+        {
+            var _user = _userRepository.GetUserByUsername(userDto.Username.Trim());
+
+            if (_user != null)
+            {
+                throw new InvalidOperationException($"Username {userDto.Username} is already taken.");
+            }
         }
 
         public void UpdateUser(int id, UserUpdateDto userDto)

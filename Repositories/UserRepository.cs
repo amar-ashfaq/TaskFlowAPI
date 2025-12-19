@@ -42,12 +42,10 @@ namespace TaskFlowAPI.Repositories
             return user;
         }
 
-        public User CreateUser(User user)
+        public void CreateUser(User user)
         {
             _context.Users.Add(user);
             _context.SaveChanges();
-
-            return user;
         }
 
         public void UpdateUser()
