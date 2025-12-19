@@ -42,6 +42,12 @@ namespace TaskFlowAPI.Repositories
             return user;
         }
 
+        public User? FindUserByUsername(string username)
+        {
+            var user = _context.Users.FirstOrDefault( x => x.Username == username);
+            return user;
+        }
+
         public void CreateUser(User user)
         {
             _context.Users.Add(user);

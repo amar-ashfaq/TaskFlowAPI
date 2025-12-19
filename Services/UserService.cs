@@ -83,7 +83,7 @@ namespace TaskFlowAPI.Services
 
         private void CheckIfExistingUsername(UserCreateDto userDto)
         {
-            var _user = _userRepository.GetUserByUsername(userDto.Username.Trim());
+            var _user = _userRepository.FindUserByUsername(userDto.Username.Trim());
 
             if (_user != null)
             {
