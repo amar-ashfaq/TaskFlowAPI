@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using TaskFlowAPI.Entities;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using TaskFlowAPI.DTOs;
 using TaskFlowAPI.Services;
 
 namespace TaskFlowAPI.Controllers
@@ -9,17 +10,18 @@ namespace TaskFlowAPI.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-        private readonly IPasswordService _passwordService;
-        public AuthController(IAuthService authService, IPasswordService passwordService)
+
+        public AuthController(IAuthService authService)
         {
             _authService = authService;
-            _passwordService = passwordService;
         }
 
-        [HttpPost]
-        public IActionResult Login(User user)
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public IActionResult Login(LoginRequestDto user)
         {
-            return Ok();
+            string token = _authService.Login(user);
+            return Ok(new { token });
         }
     }
 }

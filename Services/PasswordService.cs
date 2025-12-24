@@ -7,7 +7,7 @@ namespace TaskFlowAPI.Services
     {
         private readonly int keySize = 64;
         private readonly int iterations = 350000;
-        HashAlgorithmName hashAlgorithm = HashAlgorithmName.SHA512;
+        private readonly HashAlgorithmName hashAlgorithm = HashAlgorithmName.SHA512;
         
         public string HashPassword(string password, out byte[] passwordSalt)
         {
@@ -21,6 +21,15 @@ namespace TaskFlowAPI.Services
                 keySize);
 
             return Convert.ToHexString(hashedPassword);
+        }
+
+        public bool IsPasswordVerified(string enteredPassword, string storedHashPassword, byte[] storedSalt)
+        {
+            var hashToCompare = Rfc2898DeriveBytes.Pbkdf2(enteredPassword, storedSalt, iterations, hashAlgorithm, keySize);
+
+            bool isVerified = CryptographicOperations.FixedTimeEquals(hashToCompare, Convert.FromHexString(storedHashPassword));
+
+            return isVerified;
         }
     }
 }
