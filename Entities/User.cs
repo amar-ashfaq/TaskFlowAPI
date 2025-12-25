@@ -12,6 +12,8 @@ namespace TaskFlowAPI.Entities
         public string HashedPassword { get; set; }
         [Required]
         public string PasswordSalt { get; set; }
+        [Required]
+        public UserRole Role { get; set; } = UserRole.User;
 
         public List<TaskFlow> TaskFlows { get; set; } = [];
     }

@@ -12,5 +12,6 @@ namespace TaskFlowAPI.DTOs
         public string HashedPassword { get; set; }
         [Required]
         public string PasswordSalt { get; set; }
+        public UserRole Role { get; set; }
     }
 }

@@ -30,6 +30,10 @@ namespace TaskFlowAPI.Data
                 .Property(u => u.Name)
                 .HasMaxLength(100);
 
+            modelBuilder.Entity<User>()
+                .Property(u => u.Role)
+                .HasDefaultValue(UserRole.User);
+
             // TaskFlow relationship
             modelBuilder.Entity<TaskFlow>()
                 .HasOne(t => t.User)
