@@ -32,7 +32,8 @@ namespace TaskFlowAPI.Data
 
             modelBuilder.Entity<User>()
                 .Property(u => u.Role)
-                .HasDefaultValue(UserRole.User);
+                .HasDefaultValue(UserRole.User)
+                .HasConversion<string>();
 
             // TaskFlow relationship
             modelBuilder.Entity<TaskFlow>()
