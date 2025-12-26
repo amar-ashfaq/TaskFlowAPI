@@ -17,13 +17,14 @@ namespace TaskFlowAPI.Services
         public List<UserReadDto> GetUsers()
         {
             var users = _userRepository.GetUsers()
-                .Select(x => new UserReadDto
+                .Select(user => new UserReadDto
                 {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Username = x.Username,
-                    HashedPassword = x.HashedPassword,
-                    PasswordSalt = x.PasswordSalt
+                    Id = user.Id,
+                    Name = user.Name,
+                    Username = user.Username,
+                    HashedPassword = user.HashedPassword,
+                    PasswordSalt = user.PasswordSalt,
+                    Role = user.Role
                 })
                 .ToList();
 
@@ -39,7 +40,8 @@ namespace TaskFlowAPI.Services
                 Name = user.Name,
                 Username = user.Username,
                 HashedPassword = user.HashedPassword,
-                PasswordSalt = user.PasswordSalt
+                PasswordSalt = user.PasswordSalt,
+                Role = user.Role
             };
         }
 
@@ -53,7 +55,8 @@ namespace TaskFlowAPI.Services
                 Name = user.Name,
                 Username = user.Username,
                 HashedPassword = user.HashedPassword,
-                PasswordSalt = user.PasswordSalt
+                PasswordSalt = user.PasswordSalt,
+                Role = user.Role
             };
         }
 

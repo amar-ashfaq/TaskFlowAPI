@@ -13,9 +13,29 @@ namespace TaskFlowAPI.Services
             _taskFlowRepository = taskFlowRepository;
         }
 
-        public List<TaskReadDto> GetTaskFlows()
+        public List<TaskReadDto> GetTaskFlows(int callerUserId, bool isAdmin)
         {
-            var taskFlows = _taskFlowRepository.GetTaskFlows().
+            if (isAdmin)
+            {
+                var taskFlows = _taskFlowRepository.GetTaskFlows().
+                    Select(taskReadDto =>
+                        new TaskReadDto
+                        {
+                            Id = taskReadDto.Id,
+                            UserId = taskReadDto.UserId,
+                            Name = taskReadDto.Name,
+                            Description = taskReadDto.Description,
+                            Status = taskReadDto.Status,
+                            CreatedAt = taskReadDto.CreatedAt,
+                            UpdatedAt = taskReadDto.UpdatedAt
+                        }
+                    )
+                    .ToList();
+
+                return taskFlows;
+            }
+
+            var userTaskFlows = _taskFlowRepository.GetTaskFlowsByUserId(callerUserId).
                 Select(taskReadDto =>
                     new TaskReadDto
                     {
@@ -30,22 +50,27 @@ namespace TaskFlowAPI.Services
                 )
                 .ToList();
 
-            return taskFlows;
+            return userTaskFlows;
         }
 
-        public TaskReadDto GetTaskFlow(int id)
+        public TaskReadDto GetTaskFlow(int id, int callerUserId, bool isAdmin)
         {
-            var taskFlowDto = _taskFlowRepository.GetTaskFlow(id);
+            var taskFlow = _taskFlowRepository.GetTaskFlow(id);
+
+            if (!isAdmin && taskFlow.UserId != callerUserId)
+            {
+                throw new UnauthorizedAccessException("Cannot access tasks that don't belong to you.");
+            }
 
             return new TaskReadDto
             {
-                Id = taskFlowDto.Id,
-                UserId = taskFlowDto.UserId,
-                Name = taskFlowDto.Name,
-                Description = taskFlowDto.Description,
-                Status = taskFlowDto.Status,
-                CreatedAt = taskFlowDto.CreatedAt,
-                UpdatedAt = taskFlowDto.UpdatedAt
+                Id = taskFlow.Id,
+                UserId = taskFlow.UserId,
+                Name = taskFlow.Name,
+                Description = taskFlow.Description,
+                Status = taskFlow.Status,
+                CreatedAt = taskFlow.CreatedAt,
+                UpdatedAt = taskFlow.UpdatedAt
             };
         }
 

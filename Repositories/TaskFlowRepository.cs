@@ -19,6 +19,15 @@ namespace TaskFlowAPI.Repositories
             return taskFlows;
         }
 
+        public List<TaskFlow> GetTaskFlowsByUserId(int callerUserId)
+        {
+            var taskFlows = _context.TaskFlows
+                .Where(taskFlow => taskFlow.UserId == callerUserId)
+                .ToList();
+
+            return taskFlows;
+        }
+
         public TaskFlow GetTaskFlow(int id)
         {
             var taskFlow = _context.TaskFlows.SingleOrDefault(t => t.Id == id);

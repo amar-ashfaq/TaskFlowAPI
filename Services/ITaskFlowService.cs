@@ -4,9 +4,9 @@ namespace TaskFlowAPI.Services
 {
     public interface ITaskFlowService
     {
-        List<TaskReadDto> GetTaskFlows();
+        List<TaskReadDto> GetTaskFlows(int callerUserId, bool isAdmin);
 
-        TaskReadDto GetTaskFlow(int id);
+        TaskReadDto GetTaskFlow(int id, int callerUserId, bool isAdmin);
 
         TaskReadDto CreateTaskFlow(TaskCreateDto flow);
 

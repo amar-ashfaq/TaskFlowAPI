@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TaskFlowAPI.DTOs;
 using TaskFlowAPI.Services;
 
@@ -16,16 +18,24 @@ namespace TaskFlowAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult<TaskReadDto> GetTaskFlows()
         {
-            var taskFlows = _taskFlowService.GetTaskFlows();
+            var callerUserId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var callerUserRole = User.IsInRole("Admin");
+
+            var taskFlows = _taskFlowService.GetTaskFlows(callerUserId, callerUserRole);
             return Ok(taskFlows);
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public ActionResult<TaskReadDto> GetTaskFlow(int id)
         {
-            var taskFlow = _taskFlowService.GetTaskFlow(id);
+            var callerUserId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var callerUserRole = User.IsInRole("Admin");
+
+            var taskFlow = _taskFlowService.GetTaskFlow(id, callerUserId, callerUserRole);
             return Ok(taskFlow);
         }
 
