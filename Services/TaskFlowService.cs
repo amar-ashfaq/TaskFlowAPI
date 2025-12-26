@@ -15,42 +15,30 @@ namespace TaskFlowAPI.Services
 
         public List<TaskReadDto> GetTaskFlows(int callerUserId, bool isAdmin)
         {
+            var userTaskFlows = new List<TaskFlow>();
+
             if (isAdmin)
             {
-                var taskFlows = _taskFlowRepository.GetTaskFlows().
-                    Select(taskReadDto =>
-                        new TaskReadDto
-                        {
-                            Id = taskReadDto.Id,
-                            UserId = taskReadDto.UserId,
-                            Name = taskReadDto.Name,
-                            Description = taskReadDto.Description,
-                            Status = taskReadDto.Status,
-                            CreatedAt = taskReadDto.CreatedAt,
-                            UpdatedAt = taskReadDto.UpdatedAt
-                        }
-                    )
-                    .ToList();
-
-                return taskFlows;
+                userTaskFlows = _taskFlowRepository.GetTaskFlows();
+            }
+            else
+            {
+                userTaskFlows = _taskFlowRepository.GetTaskFlowsByUserId(callerUserId);
             }
 
-            var userTaskFlows = _taskFlowRepository.GetTaskFlowsByUserId(callerUserId).
-                Select(taskReadDto =>
-                    new TaskReadDto
-                    {
-                        Id = taskReadDto.Id,
-                        UserId = taskReadDto.UserId,
-                        Name = taskReadDto.Name,
-                        Description = taskReadDto.Description,
-                        Status = taskReadDto.Status,
-                        CreatedAt = taskReadDto.CreatedAt,
-                        UpdatedAt = taskReadDto.UpdatedAt
-                    }
-                )
-                .ToList();
-
-            return userTaskFlows;
+            return userTaskFlows.Select(taskReadDto =>
+                new TaskReadDto
+                {
+                    Id = taskReadDto.Id,
+                    UserId = taskReadDto.UserId,
+                    Name = taskReadDto.Name,
+                    Description = taskReadDto.Description,
+                    Status = taskReadDto.Status,
+                    CreatedAt = taskReadDto.CreatedAt,
+                    UpdatedAt = taskReadDto.UpdatedAt
+                }
+            )
+            .ToList();
         }
 
         public TaskReadDto GetTaskFlow(int id, int callerUserId, bool isAdmin)
