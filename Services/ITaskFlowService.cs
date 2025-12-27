@@ -10,8 +10,8 @@ namespace TaskFlowAPI.Services
 
         TaskReadDto CreateTaskFlow(TaskCreateDto flow);
 
-        TaskReadDto UpdateTaskFlow(int id, TaskUpdateDto flow);
+        void UpdateTaskFlow(int id, TaskUpdateDto flow, int callerUserId, bool isAdmin);
 
-        void DeleteTaskFlow(int id);
+        void DeleteTaskFlow(int id, int callerUserId, bool isAdmin);
     }
 }

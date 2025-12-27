@@ -40,26 +40,32 @@ namespace TaskFlowAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult CreateTaskFlow(TaskCreateDto taskDto) 
         { 
             var created = _taskFlowService.CreateTaskFlow(taskDto);
-
-            Console.WriteLine(created.ToString());
-
             return CreatedAtAction(nameof(GetTaskFlow), new { created.Id }, created);
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public IActionResult UpdateTaskFlow(int id, TaskUpdateDto taskDto)
         {
-            _taskFlowService.UpdateTaskFlow(id, taskDto);
+            var callerUserId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var callerUserRole = User.IsInRole("Admin");
+
+            _taskFlowService.UpdateTaskFlow(id, taskDto, callerUserId, callerUserRole);
             return NoContent();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult DeleteTaskFlow(int id) 
-        { 
-            _taskFlowService.DeleteTaskFlow(id);
+        {
+            var callerUserId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var callerUserRole = User.IsInRole("Admin");
+
+            _taskFlowService.DeleteTaskFlow(id, callerUserId, callerUserRole);
             return NoContent();
         }
     }

@@ -43,12 +43,10 @@ namespace TaskFlowAPI.Services
 
         public TaskReadDto GetTaskFlow(int id, int callerUserId, bool isAdmin)
         {
+            string message = "Cannot access tasks that don't belong to you.";
             var taskFlow = _taskFlowRepository.GetTaskFlow(id);
 
-            if (!isAdmin && taskFlow.UserId != callerUserId)
-            {
-                throw new UnauthorizedAccessException("Cannot access tasks that don't belong to you.");
-            }
+            CheckUserAuthorisation(callerUserId, isAdmin, message, taskFlow);
 
             return new TaskReadDto
             {
@@ -72,7 +70,7 @@ namespace TaskFlowAPI.Services
                 Name = flowDto.Name,
                 Description = flowDto.Description,
                 Status = flowDto.Status,
-                CreatedAt = flowDto.CreatedAt
+                CreatedAt = DateTime.UtcNow
             };
 
             _taskFlowRepository.CreateTaskFlow(taskFlow);
@@ -89,34 +87,40 @@ namespace TaskFlowAPI.Services
             };
         }
 
-        public TaskReadDto UpdateTaskFlow(int id, TaskUpdateDto flowDto)
+        public void UpdateTaskFlow(int id, TaskUpdateDto flowDto, int userCallerId, bool isAdmin)
         {
             ArgumentNullException.ThrowIfNull(flowDto);
 
+            string message = "Cannot update a task that doesn't belong to you.";
+
             var taskFlow = _taskFlowRepository.GetTaskFlow(id);
-            
+
+            CheckUserAuthorisation(userCallerId, isAdmin, message, taskFlow);
+
             taskFlow.Name = flowDto.Name;
             taskFlow.Description = flowDto.Description;
             taskFlow.Status = flowDto.Status;
-            taskFlow.UpdatedAt = flowDto.UpdatedAt;
+            taskFlow.UpdatedAt = DateTime.UtcNow;
 
             _taskFlowRepository.UpdateTaskFlow();
-
-            return new TaskReadDto
-            {
-                Id = taskFlow.Id,
-                UserId = taskFlow.UserId,
-                Name = taskFlow.Name,
-                Description = taskFlow.Description,
-                Status = taskFlow.Status,
-                CreatedAt = taskFlow.CreatedAt,
-                UpdatedAt = taskFlow.UpdatedAt
-            };
         }
 
-        public void DeleteTaskFlow(int id)
+        public void DeleteTaskFlow(int id, int callerUserId, bool isAdmin)
         {
+            string message = "Cannot delete a task that doesn't belong to you.";
+            var taskFlow = _taskFlowRepository.GetTaskFlow(id);
+
+            CheckUserAuthorisation(callerUserId, isAdmin, message, taskFlow);
+
             _taskFlowRepository.DeleteTaskFlow(id);
+        }
+
+        private static void CheckUserAuthorisation(int callerUserId, bool isAdmin, string message, TaskFlow? taskFlow)
+        {
+            if (!isAdmin && taskFlow.UserId != callerUserId)
+            {
+                throw new UnauthorizedAccessException(message);
+            }
         }
     }
 }

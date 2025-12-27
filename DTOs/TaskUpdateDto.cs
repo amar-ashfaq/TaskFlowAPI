@@ -11,7 +11,5 @@ namespace TaskFlowAPI.DTOs
         public string Description { get; set; }
 
         public TaskStatus Status { get; set; }
-
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }
